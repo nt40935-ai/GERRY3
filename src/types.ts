@@ -49,6 +49,13 @@ export interface CartItem extends Product {
   toppings?: Topping[]; // NEW: Selected toppings
   note?: string; // Item-specific note
   originalId?: string; 
+  // Optional bundle/combo metadata
+  bundle?: {
+    type: 'combo';
+    comboId: string;
+    comboName: string;
+    items: ComboItem[];
+  };
 }
 
 export interface Review {
@@ -135,6 +142,24 @@ export interface DiscountCode {
   isActive: boolean;
 }
 
+// --- Combos (Bundles) ---
+export interface ComboItem {
+  productId: string;
+  quantity: number;
+}
+
+export interface Combo {
+  id: string;
+  name: string;
+  description: string;
+  image?: string;
+  items: ComboItem[];
+  // Final price (USD base). For VN display, app will convert via formatPrice.
+  price: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
 export type UserRole = 'customer' | 'admin';
 
 export interface User {
@@ -197,4 +222,22 @@ export interface JobApplication {
   cvFileName?: string;
   cvFileData?: string; // base64 data url for download/view
   submittedAt: string;
+}
+
+// --- Table Reservation / Booking ---
+export type ReservationStatus = 'Pending' | 'Confirmed' | 'Cancelled';
+
+export interface Reservation {
+  id: string;
+  userId?: string;
+  name: string;
+  phone: string;
+  email?: string;
+  note?: string;
+  partySize: number;
+  tableId: string;
+  // ISO string (full datetime)
+  datetime: string;
+  status: ReservationStatus;
+  createdAt: string;
 }

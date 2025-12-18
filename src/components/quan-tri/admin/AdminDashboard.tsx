@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Product, Order, OrderStatus, Banner, BrandSettings, Category, DiscountCode, Language, User, Topping, Job, JobApplication, PartnershipContent } from '../../../types';
-import { LayoutDashboard, Coffee, ShoppingBag, LogOut, TrendingUp, Users, DollarSign, Image as ImageIcon, Settings, BarChart3, Globe, List, Ticket, Store, Layers, Briefcase, Inbox, MessageSquare } from 'lucide-react';
+import { Product, Order, OrderStatus, Banner, BrandSettings, Category, DiscountCode, Language, User, Topping, Job, JobApplication, PartnershipContent, Combo, Reservation, ReservationStatus } from '../../../types';
+import { LayoutDashboard, Coffee, ShoppingBag, LogOut, TrendingUp, Users, DollarSign, Image as ImageIcon, Settings, BarChart3, Globe, List, Ticket, Store, Layers, Briefcase, Inbox, MessageSquare, PackagePlus, CalendarDays } from 'lucide-react';
 import ProductManager from './ProductManager';
 import OrderManager from './OrderManager';
 import BannerManager from './BannerManager';
@@ -15,6 +15,8 @@ import JobManager from './JobManager';
 import ApplicationManager from './ApplicationManager';
 import UserProfile from '../../tai-khoan/UserProfile';
 import PartnershipManager from './PartnershipManager';
+import ComboManager from './ComboManager';
+import ReservationManager from './ReservationManager';
 import { TRANSLATIONS } from '../../../constants';
 
 interface AdminDashboardProps {
@@ -25,6 +27,8 @@ interface AdminDashboardProps {
   brandSettings: BrandSettings;
   categories: Category[];
   promotions: DiscountCode[];
+  combos: Combo[];
+  reservations: Reservation[];
   users: User[];
   toppings: Topping[]; // NEW PROP
   jobs: Job[];
@@ -45,6 +49,10 @@ interface AdminDashboardProps {
   onDeleteCategory: (id: string) => void;
   onAddPromotion: (promo: DiscountCode) => void;
   onDeletePromotion: (id: string) => void;
+  onAddCombo: (combo: Combo) => void;
+  onUpdateCombo: (combo: Combo) => void;
+  onDeleteCombo: (id: string) => void;
+  onUpdateReservationStatus: (id: string, status: ReservationStatus) => void;
   onUpdateUserRole: (userId: string, newRole: 'admin' | 'customer') => void;
   onUpdateUser: (user: User) => void;
   onAddTopping: (topping: Topping) => void; // NEW
@@ -66,6 +74,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   brandSettings,
   categories,
   promotions,
+  combos,
+  reservations,
   users,
   toppings,
   jobs,
@@ -85,6 +95,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onDeleteCategory,
   onAddPromotion,
   onDeletePromotion,
+  onAddCombo,
+  onUpdateCombo,
+  onDeleteCombo,
+  onUpdateReservationStatus,
   onUpdateUserRole,
   onUpdateUser,
   onAddTopping,
@@ -98,7 +112,23 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   language,
   setLanguage
 }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'banners' | 'settings' | 'reports' | 'categories' | 'promotions' | 'users' | 'toppings' | 'recruitment' | 'applications' | 'partnership'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    | 'overview'
+    | 'products'
+    | 'orders'
+    | 'banners'
+    | 'settings'
+    | 'reports'
+    | 'categories'
+    | 'promotions'
+    | 'combos'
+    | 'reservations'
+    | 'users'
+    | 'toppings'
+    | 'recruitment'
+    | 'applications'
+    | 'partnership'
+  >('overview');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const t = TRANSLATIONS[language];
 
@@ -156,9 +186,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <NavItem id="categories" icon={List} label={t.admin_nav.categories} />
           <NavItem id="toppings" icon={Layers} label="Toppings" />
           <NavItem id="orders" icon={ShoppingBag} label={t.admin_nav.orders} badge={pendingOrdersCount} />
+          <NavItem id="reservations" icon={CalendarDays} label={language === 'vi' ? 'Đặt bàn' : 'Reservations'} badge={reservations.filter(r => r.status === 'Pending').length} />
           <NavItem id="users" icon={Users} label={t.admin_nav.users} />
           <NavItem id="banners" icon={ImageIcon} label={t.admin_nav.banners} />
           <NavItem id="promotions" icon={Ticket} label={t.admin_nav.promotions} />
+          <NavItem id="combos" icon={PackagePlus} label={language === 'vi' ? 'Combo' : 'Combos'} />
           <NavItem id="recruitment" icon={Briefcase} label={t.admin_nav.recruitment || 'Recruitment'} />
           <NavItem id="applications" icon={Inbox} label={t.admin_nav.applications || 'Applications'} badge={applications.length} />
           <NavItem id="partnership" icon={MessageSquare} label={t.admin_nav.partnership || 'Partnership'} />
@@ -204,6 +236,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
              activeTab === 'toppings' ? 'Topping Management' :
              activeTab === 'recruitment' ? (t.admin_nav.recruitment || 'Recruitment') :
              activeTab === 'applications' ? (t.admin_nav.applications || 'Applications') :
+             activeTab === 'combos' ? (language === 'vi' ? 'Combo' : 'Combos') :
+             activeTab === 'reservations' ? (language === 'vi' ? 'Đặt bàn' : 'Reservations') :
              activeTab === 'promotions' ? t.admin_nav.promotions :
              activeTab === 'users' ? t.admin_nav.users :
              activeTab === 'orders' ? t.admin_nav.orders :
@@ -368,6 +402,25 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               onDelete={onDeletePromotion}
               language={language}
              />
+          )}
+
+          {activeTab === 'combos' && (
+            <ComboManager
+              combos={combos}
+              products={products}
+              onAdd={onAddCombo}
+              onUpdate={onUpdateCombo}
+              onDelete={onDeleteCombo}
+              language={language}
+            />
+          )}
+
+          {activeTab === 'reservations' && (
+            <ReservationManager
+              reservations={reservations}
+              onUpdateStatus={onUpdateReservationStatus}
+              language={language}
+            />
           )}
 
           {activeTab === 'recruitment' && (

@@ -95,6 +95,8 @@ const Navbar: React.FC<NavbarProps> = ({
         <div className="hidden md:flex items-center gap-8">
           {[
             { id: 'menu', label: t.nav.menu },
+            { id: 'combos', label: (t.nav as any).combos || 'Combos' },
+            { id: 'booking', label: (t.nav as any).booking || 'Booking' },
             { id: 'careers', label: t.nav.careers },
             { id: 'apply', label: t.nav.apply },
             { id: 'partnership', label: t.nav.partner || 'Partnerships' },

@@ -482,7 +482,7 @@ export const calculateEarnedPoints = (finalTotal: number) => {
 
 export const TRANSLATIONS = {
   en: {
-    nav: { menu: 'Menu', about: 'About', contact: 'Contact', careers: 'Careers', apply: 'Apply', partner: 'Partnerships', sign_in: 'Sign In', sign_out: 'Sign Out', profile: 'Profile' },
+    nav: { menu: 'Menu', combos: 'Combos', booking: 'Booking', about: 'About', contact: 'Contact', careers: 'Careers', apply: 'Apply', partner: 'Partnerships', sign_in: 'Sign In', sign_out: 'Sign Out', profile: 'Profile' },
     hero: { est: 'EST. 2024 • PREMIUM ROASTS & TEAS', ends_in: 'Ends In:', cta: 'Order Now' },
     menu: { title: 'Our Menu', special: 'Special Offers', found: 'Found', items: 'items', matching: 'matching', no_products: 'No products found', search_not_found: 'We do not currently have this product, we appreciate your understanding.', try_adjust: 'Try adjusting your filters', add_to_cart: 'Add to Cart', sale: 'SALE', search_placeholder: 'Search for coffee, tea, pastries...', sold_out: 'Sold Out' },
     cart: { title: 'Your Order', empty: 'Your cart is empty.', empty_desc: 'Time to fuel up with some coffee!', browse: 'Browse Menu', subtotal: 'Subtotal', checkout: 'Proceed to Checkout' },
@@ -552,7 +552,7 @@ export const TRANSLATIONS = {
       [ProductCategory.PROMOTION]: 'Promotion' 
     },
     // Admin Translations
-    admin_nav: { overview: 'Overview', reports: 'Sales Reports', products: 'Products', orders: 'Orders', banners: 'Banners', settings: 'Brand Settings', categories: 'Categories', promotions: 'Promotions', users: 'Users', sign_out: 'Sign Out', recruitment: 'Recruitment', applications: 'Applications', partnership: 'Partnership' },
+    admin_nav: { overview: 'Overview', reports: 'Sales Reports', products: 'Products', orders: 'Orders', banners: 'Banners', settings: 'Brand Settings', categories: 'Categories', promotions: 'Promotions', combos: 'Combos', reservations: 'Reservations', users: 'Users', sign_out: 'Sign Out', recruitment: 'Recruitment', applications: 'Applications', partnership: 'Partnership' },
     admin_login: { title: 'Admin Portal', subtitle: 'GERRY COFFEE Management System', email: 'Email / Phone', password: 'Password', sign_in: 'Sign In', back: 'Back to Store', invalid: 'Invalid credentials.' },
     admin_dash: { welcome: 'Dashboard Overview', actions: 'Quick Actions', view_analytics: 'View Sales Analytics', add_product: 'Add New Product', manage_orders: 'Manage Recent Orders', update_banners: 'Update Website Banners' },
     admin_stats: { revenue: 'Total Revenue', orders: 'Total Orders', items: 'Menu Items', active_banners: 'Active Banners', order_value: 'Avg. Order Value' },
@@ -567,7 +567,7 @@ export const TRANSLATIONS = {
     uploader: { label: 'Image', paste: 'Paste Link', upload: 'Upload File', select: 'Click to select image', preview: 'Current Preview' }
   },
   vi: {
-    nav: { menu: 'Thực Đơn', about: 'Về Chúng Tôi', contact: 'Liên Hệ', careers: 'Tuyển Dụng', apply: 'Ứng Tuyển', partner: 'Hợp Tác', sign_in: 'Đăng Nhập', sign_out: 'Đăng Xuất', profile: 'Hồ Sơ' },
+    nav: { menu: 'Thực Đơn', combos: 'Combo', booking: 'Đặt bàn', about: 'Về Chúng Tôi', contact: 'Liên Hệ', careers: 'Tuyển Dụng', apply: 'Ứng Tuyển', partner: 'Hợp Tác', sign_in: 'Đăng Nhập', sign_out: 'Đăng Xuất', profile: 'Hồ Sơ' },
     hero: { est: 'THÀNH LẬP 2024 • CÀ PHÊ & TRÀ', ends_in: 'Kết Thúc Sau:', cta: 'Đặt Ngay' },
     menu: { title: 'Thực Đơn', special: 'Khuyến Mãi', found: 'Tìm thấy', items: 'sản phẩm', matching: 'phù hợp với', no_products: 'Không tìm thấy sản phẩm', search_not_found: 'Sản phẩm này chúng tôi hiện chưa có, mong khách hàng thông cảm.', try_adjust: 'Hãy thử tìm kiếm từ khóa khác', add_to_cart: 'Thêm vào giỏ', sale: 'GIẢM', search_placeholder: 'Tìm trà, cà phê, bánh...', sold_out: 'HẾT HÀNG' },
     cart: { title: 'Giỏ Hàng', empty: 'Giỏ hàng trống.', empty_desc: 'Hãy nạp năng lượng bằng chút cà phê!', browse: 'Xem Thực Đơn', subtotal: 'Tạm tính', checkout: 'Thanh Toán' },
@@ -637,7 +637,7 @@ export const TRANSLATIONS = {
       [ProductCategory.PROMOTION]: 'Khuyến Mãi' 
     },
     // Admin Translations (Vietnamese)
-    admin_nav: { overview: 'Tổng Quan', reports: 'Báo Cáo Doanh Thu', products: 'Sản Phẩm', orders: 'Đơn Hàng', banners: 'Quảng Cáo', settings: 'Thương Hiệu', categories: 'Danh Mục', promotions: 'Mã Giảm Giá', users: 'Người Dùng', sign_out: 'Đăng Xuất', recruitment: 'Tuyển Dụng', applications: 'Hồ Sơ Ứng Tuyển', partnership: 'Hợp Tác' },
+    admin_nav: { overview: 'Tổng Quan', reports: 'Báo Cáo Doanh Thu', products: 'Sản Phẩm', orders: 'Đơn Hàng', banners: 'Quảng Cáo', settings: 'Thương Hiệu', categories: 'Danh Mục', promotions: 'Mã Giảm Giá', combos: 'Combo', reservations: 'Đặt bàn', users: 'Người Dùng', sign_out: 'Đăng Xuất', recruitment: 'Tuyển Dụng', applications: 'Hồ Sơ Ứng Tuyển', partnership: 'Hợp Tác' },
     admin_login: { title: 'Cổng Quản Trị', subtitle: 'Hệ Thống Quản Lý GERRY COFFEE', email: 'Email / SĐT', password: 'Mật Khẩu', sign_in: 'Đăng Nhập', back: 'Quay Lại Cửa Hàng', invalid: 'Thông tin đăng nhập không đúng.' },
     admin_dash: { welcome: 'Tổng Quan Bảng Điều Khiển', actions: 'Thao Tác Nhanh', view_analytics: 'Xem Phân Tích Doanh Thu', add_product: 'Thêm Sản Phẩm Mới', manage_orders: 'Quản Lý Đơn Hàng Gần Đây', update_banners: 'Cập Nhật Banner Website' },
     admin_stats: { revenue: 'Tổng Doanh Thu', orders: 'Tổng Đơn Hàng', items: 'Món Trong Menu', active_banners: 'Banner Đang Chạy', order_value: 'Giá Trị Đơn TB' },

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Product, ProductSize, Language, ProductCategory, Review, User, Topping } from '../../types';
-import { X, Coffee, MessageSquare, Star, Layers, Check } from 'lucide-react';
+import { X, Coffee, MessageSquare, Star, Layers, Check, Share2 } from 'lucide-react';
 import { TRANSLATIONS, formatPrice, SIZE_L_UPCHARGE, calculateItemPrice } from '../../constants';
 import ReviewSection from './ReviewSection';
 
@@ -10,6 +10,7 @@ interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (product: Product, size?: ProductSize, note?: string, toppings?: Topping[]) => void;
+  onShare?: (product: Product) => void;
   language: Language;
   reviews: Review[];
   onAddReview: (review: Review) => void;
@@ -17,7 +18,7 @@ interface ProductModalProps {
   toppings: Topping[]; // Dynamic toppings passed from App state
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, onConfirm, language, reviews, onAddReview, user, toppings }) => {
+const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, onConfirm, onShare, language, reviews, onAddReview, user, toppings }) => {
   const [size, setSize] = useState<ProductSize>('M');
   const [note, setNote] = useState('');
   const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
@@ -60,6 +61,17 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       
       <div className="relative bg-white w-full max-w-2xl h-[95vh] sm:h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        {onShare && (
+          <button
+            type="button"
+            onClick={() => onShare(product)}
+            className="absolute top-2 right-14 sm:top-4 sm:right-16 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors backdrop-blur-md z-10 active:scale-95 touch-manipulation"
+            aria-label="Share"
+            title={language === 'vi' ? 'Chia sẻ' : 'Share'}
+          >
+            <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        )}
         <button 
             onClick={onClose}
             className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors backdrop-blur-md z-10 active:scale-95 touch-manipulation"

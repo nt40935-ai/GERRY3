@@ -8,6 +8,8 @@ import Partnership from './components/giao-dien/Partnership';
 import Footer from './components/giao-dien/Footer';
 import Careers from './components/giao-dien/Careers';
 import ApplicationSection from './components/giao-dien/ApplicationSection';
+import ComboSection from './components/giao-dien/ComboSection';
+import TableBooking from './components/giao-dien/TableBooking';
 import Cart from './components/gio-hang/Cart';
 import DiscountCoupons from './components/gio-hang/DiscountCoupons';
 import Assistant from './components/tien-ich/Assistant';
@@ -18,7 +20,7 @@ import CheckoutModal from './components/gio-hang/CheckoutModal';
 import Sidebar from './components/tien-ich/Sidebar';
 import ProductModal from './components/san-pham/ProductModal';
 import UserProfile from './components/tai-khoan/UserProfile';
-import { CartItem, Product, Order, OrderStatus, Banner, User, FilterState, Language, BrandSettings, Category, DiscountCode, ProductSize, Review, Topping, Job, JobApplication, PartnershipContent } from './types';
+import { CartItem, Product, Order, OrderStatus, Banner, User, FilterState, Language, BrandSettings, Category, DiscountCode, ProductSize, Review, Topping, Job, JobApplication, PartnershipContent, Combo, Reservation, ReservationStatus } from './types';
 import { PRODUCTS, BANNERS, INITIAL_CATEGORIES, MOCK_REVIEWS, TOPPINGS_LIST, DEFAULT_JOBS, DEFAULT_PARTNERSHIP_CONTENT, calculateItemPrice, calculateEarnedPoints } from './constants';
 
 const App: React.FC = () => {
@@ -195,6 +197,40 @@ const App: React.FC = () => {
     } catch (e) { return DEFAULT_PARTNERSHIP_CONTENT; }
   });
 
+  // 14. Combos (Bundles)
+  const [combos, setCombos] = useState<Combo[]>(() => {
+    try {
+      const saved = localStorage.getItem('gerry_combos');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    // Default sample combos
+    return [
+      {
+        id: 'combo-1',
+        name: 'Combo Đêm Khuya',
+        description: 'Giảm giá sau 22:00 • 1 burger + 1 khoai + 1 nước',
+        image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80',
+        items: [
+          { productId: '1a', quantity: 1 },
+          { productId: '13', quantity: 1 },
+        ],
+        price: 8.50,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      }
+    ];
+  });
+
+  // 15. Reservations (Table booking)
+  const [reservations, setReservations] = useState<Reservation[]>(() => {
+    try {
+      const saved = localStorage.getItem('gerry_reservations');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   // UI State
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -230,6 +266,8 @@ const App: React.FC = () => {
   useEffect(() => localStorage.setItem('gerry_jobs', JSON.stringify(jobs)), [jobs]);
   useEffect(() => localStorage.setItem('gerry_applications', JSON.stringify(applications)), [applications]);
   useEffect(() => localStorage.setItem('gerry_partnership', JSON.stringify(partnershipContent)), [partnershipContent]);
+  useEffect(() => localStorage.setItem('gerry_combos', JSON.stringify(combos)), [combos]);
+  useEffect(() => localStorage.setItem('gerry_reservations', JSON.stringify(reservations)), [reservations]);
 
   // Login Handler
   const handleLogin = (incomingUser: User) => {
@@ -291,7 +329,41 @@ const App: React.FC = () => {
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
     setIsProductModalOpen(true);
+
+    // Update URL for shareable product detail
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('product', product.id);
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {}
   };
+
+  const closeProductModal = () => {
+    setIsProductModalOpen(false);
+    // Clear product param
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('product');
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {}
+  };
+
+  // Open product modal if user visits with ?product=...
+  const [didParseProductParam, setDidParseProductParam] = useState(false);
+  useEffect(() => {
+    if (didParseProductParam) return;
+    setDidParseProductParam(true);
+    try {
+      const url = new URL(window.location.href);
+      const pid = url.searchParams.get('product');
+      if (!pid) return;
+      const p = products.find(x => x.id === pid);
+      if (p) {
+        setSelectedProduct(p);
+        setIsProductModalOpen(true);
+      }
+    } catch (e) {}
+  }, [didParseProductParam, products]);
 
   // AddToCart with Grouping by Size/Note/Toppings
   const handleAddToCart = (product: Product, size?: ProductSize, note?: string, toppings?: Topping[]) => {
@@ -340,6 +412,42 @@ const App: React.FC = () => {
 
   const removeItem = (cartId: string) => {
     setCartItems(prev => prev.filter(item => item.id !== cartId));
+  };
+
+  // Combo -> Add to Cart as a single bundle item
+  const handleAddComboToCart = (combo: Combo) => {
+    // Build a short note for display
+    const note = combo.items
+      .map(it => {
+        const p = products.find(x => x.id === it.productId);
+        return p ? `${it.quantity}x ${p.name}` : `${it.quantity}x ${it.productId}`;
+      })
+      .slice(0, 4)
+      .join(', ');
+
+    const bundleItem: CartItem = {
+      id: `${combo.id}-${Date.now()}-${Math.random()}`,
+      originalId: combo.id,
+      name: combo.name,
+      description: combo.description,
+      price: combo.price,
+      category: 'Combo',
+      image: combo.image || 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&q=80',
+      rating: 5,
+      reviewCount: 0,
+      isAvailable: true,
+      quantity: 1,
+      note: note ? `Combo: ${note}` : undefined,
+      bundle: {
+        type: 'combo',
+        comboId: combo.id,
+        comboName: combo.name,
+        items: combo.items
+      }
+    };
+
+    setCartItems(prev => [...prev, bundleItem]);
+    setIsCartOpen(true);
   };
 
   // Checkout Logic (FIXED: Now saves cart items to order + loyalty points)
@@ -423,6 +531,16 @@ const App: React.FC = () => {
   const handleUpdateTopping = (updatedTopping: Topping) => setToppings(prev => prev.map(t => t.id === updatedTopping.id ? updatedTopping : t));
   const handleDeleteTopping = (id: string) => setToppings(prev => prev.filter(t => t.id !== id));
 
+  // Combo Logic
+  const handleAddCombo = (combo: Combo) => setCombos(prev => [combo, ...prev]);
+  const handleUpdateCombo = (combo: Combo) => setCombos(prev => prev.map(c => (c.id === combo.id ? combo : c)));
+  const handleDeleteCombo = (id: string) => setCombos(prev => prev.filter(c => c.id !== id));
+
+  // Reservation Logic
+  const handleCreateReservation = (reservation: Reservation) => setReservations(prev => [reservation, ...prev]);
+  const handleUpdateReservationStatus = (id: string, status: ReservationStatus) =>
+    setReservations(prev => prev.map(r => (r.id === id ? { ...r, status } : r)));
+
   // Recruitment Logic
   const handleAddJob = (job: Job) => setJobs(prev => [...prev, job]);
   const handleUpdateJob = (job: Job) => setJobs(prev => prev.map(j => j.id === job.id ? job : j));
@@ -454,6 +572,8 @@ const App: React.FC = () => {
         brandSettings={brandSettings}
         categories={categories}
         promotions={promotions}
+        combos={combos}
+        reservations={reservations}
         users={allUsers}
         toppings={toppings} // Pass toppings to dashboard
         jobs={jobs}
@@ -473,6 +593,10 @@ const App: React.FC = () => {
         onDeleteCategory={handleDeleteCategory}
         onAddPromotion={handleAddPromotion}
         onDeletePromotion={handleDeletePromotion}
+        onAddCombo={handleAddCombo}
+        onUpdateCombo={handleUpdateCombo}
+        onDeleteCombo={handleDeleteCombo}
+        onUpdateReservationStatus={handleUpdateReservationStatus}
         onUpdateUserRole={handleUpdateUserRole}
         onUpdateUser={handleUpdateUserProfile}
         onAddTopping={handleAddTopping}
@@ -533,6 +657,13 @@ const App: React.FC = () => {
         promotions={promotions}
         language={language}
       />
+
+      <ComboSection
+        combos={combos}
+        products={products}
+        language={language}
+        onAddComboToCart={handleAddComboToCart}
+      />
       
       <Menu 
         products={products}
@@ -575,6 +706,13 @@ const App: React.FC = () => {
       />
 
       <Partnership language={language} content={partnershipContent} />
+
+      <TableBooking
+        language={language}
+        user={user}
+        reservations={reservations}
+        onCreateReservation={handleCreateReservation}
+      />
 
       <About />
       
@@ -637,13 +775,26 @@ const App: React.FC = () => {
       <ProductModal 
         product={selectedProduct}
         isOpen={isProductModalOpen}
-        onClose={() => setIsProductModalOpen(false)}
+        onClose={closeProductModal}
         onConfirm={handleAddToCart}
         language={language}
         reviews={reviews}
         onAddReview={handleAddReview}
         user={user}
         toppings={toppings} // Pass dynamic toppings
+        onShare={(product) => {
+          const shareUrl = new URL(window.location.href);
+          shareUrl.searchParams.set('product', product.id);
+          const urlStr = shareUrl.toString();
+          const title = product.name;
+          const text = product.description;
+          if ((navigator as any).share) {
+            (navigator as any).share({ title, text, url: urlStr }).catch(() => {});
+          } else {
+            navigator.clipboard.writeText(urlStr).catch(() => {});
+            alert(language === 'vi' ? 'Đã sao chép link món!' : 'Product link copied!');
+          }
+        }}
       />
 
       {user && (
