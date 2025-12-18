@@ -507,7 +507,10 @@ export const TRANSLATIONS = {
       reset_desc: "Enter your email or phone to reset your password",
       reset_success: "Password reset instructions sent!",
       reset_success_desc: "Please check your email or phone for reset instructions.",
-      back_to_login: "Back to Login"
+      back_to_login: "Back to Login",
+      continue_with: "Or continue with",
+      sign_in_google: "Sign in with Google",
+      sign_in_facebook: "Sign in with Facebook"
     },
     checkout: { 
       title: 'Checkout', shipping: 'Shipping Details', payment: 'Payment Method', online: 'Bank Transfer', cod: 'Cash on Delivery', 
@@ -520,7 +523,13 @@ export const TRANSLATIONS = {
       discount_placeholder: 'Enter your code...',
       apply: 'Apply',
       discount: 'Discount',
-      remove: 'Remove'
+      remove: 'Remove',
+      momo: 'MoMo Wallet',
+      zalopay: 'ZaloPay',
+      vnpay: 'VNPay',
+      paypal: 'PayPal',
+      stripe: 'Credit/Debit Card',
+      qr: 'QR Code'
     },
     sidebar: { menu_filters: 'Store Categories', categories: 'Product Types', price_range: 'Price Range', min: 'Min', max: 'Max', discover: 'Discover More', reset: 'Reset Filters', search_placeholder: 'Search... (Press Enter)' },
     footer: { quick_links: 'Quick Links', contact: 'Contact Us', hours: 'Opening Hours', rights: 'All rights reserved.', location: 'Our Location' },
@@ -583,7 +592,10 @@ export const TRANSLATIONS = {
       reset_desc: "Nhập email hoặc số điện thoại để đặt lại mật khẩu",
       reset_success: "Đã gửi hướng dẫn đặt lại mật khẩu!",
       reset_success_desc: "Vui lòng kiểm tra email hoặc số điện thoại của bạn.",
-      back_to_login: "Quay lại đăng nhập"
+      back_to_login: "Quay lại đăng nhập",
+      continue_with: "Hoặc đăng nhập bằng",
+      sign_in_google: "Đăng nhập bằng Google",
+      sign_in_facebook: "Đăng nhập bằng Facebook"
     },
     checkout: { 
       title: 'Thanh Toán', shipping: 'Thông Tin Giao Hàng', payment: 'Phương Thức Thanh Toán', online: 'Chuyển Khoản Ngân Hàng', cod: 'Tiền Mặt Khi Nhận Hàng', 
@@ -596,7 +608,13 @@ export const TRANSLATIONS = {
       discount_placeholder: 'Nhập mã giảm giá...',
       apply: 'Áp dụng',
       discount: 'Giảm giá',
-      remove: 'Xóa mã'
+      remove: 'Xóa mã',
+      momo: 'Ví MoMo',
+      zalopay: 'ZaloPay',
+      vnpay: 'VNPay',
+      paypal: 'PayPal',
+      stripe: 'Thẻ Tín Dụng/Ghi Nợ',
+      qr: 'Mã QR'
     },
     sidebar: { menu_filters: 'Danh Mục Sản Phẩm', categories: 'Sản Phẩm Tại Cửa Hàng', price_range: 'Khoảng Giá', min: 'Thấp nhất', max: 'Cao nhất', discover: 'Khám Phá Thêm', reset: 'Đặt Lại Bộ Lọc', search_placeholder: 'Tìm kiếm... (Nhấn Enter)' },
     footer: { quick_links: 'Liên Kết Nhanh', contact: 'Liên Hệ', hours: 'Giờ Mở Cửa', rights: 'Đã đăng ký bản quyền.', location: 'Vị Trí Cửa Hàng' },

@@ -45,32 +45,32 @@ const Menu: React.FC<MenuProps> = ({ products, categories, onAddToCart, filters,
   const uiCategories = [{ id: 'all', key: 'All', name: t.cats['All'] || 'All' }, ...categories];
 
   return (
-    <section id="menu" className="py-24 bg-coffee-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-serif font-bold text-coffee-900 mb-4">{t.menu.title}</h2>
-          <div className="w-20 h-1 bg-amber-600 mx-auto rounded-full mb-8"></div>
+    <section id="menu" className="py-12 sm:py-16 md:py-24 bg-coffee-50">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-coffee-900 mb-3 sm:mb-4">{t.menu.title}</h2>
+          <div className="w-16 sm:w-20 h-1 bg-amber-600 mx-auto rounded-full mb-6 sm:mb-8"></div>
           
           {/* Main Search Bar */}
-          <div className="max-w-md mx-auto mb-10 relative">
+          <div className="max-w-md mx-auto mb-6 sm:mb-8 md:mb-10 relative">
              <input 
                type="text"
                value={localSearch}
                onChange={(e) => setLocalSearch(e.target.value)}
                onKeyDown={handleSearchKeyDown}
                placeholder={t.menu.search_placeholder}
-               className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 bg-white"
+               className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 bg-white text-sm sm:text-base"
              />
-             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+             <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
           </div>
 
           {/* Quick Category Filter */}
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-2">
             {uiCategories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setFilters({ ...filters, category: cat.key })}
-                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                className={`px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 active:scale-95 touch-manipulation ${
                   filters.category === cat.key
                     ? 'bg-coffee-900 text-white shadow-lg'
                     : cat.key === 'Promotion' // Fallback check or specific ID check if needed
@@ -100,14 +100,14 @@ const Menu: React.FC<MenuProps> = ({ products, categories, onAddToCart, filters,
 
         {/* Product Grid */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
             {filteredProducts.map((product) => (
               <div 
                 key={product.id} 
                 className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative flex flex-col ${!product.isAvailable ? 'opacity-70' : ''}`}
               >
                 {/* Image */}
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50">
+                <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50">
                   <img 
                     src={product.image} 
                     alt={product.name} 
@@ -153,34 +153,35 @@ const Menu: React.FC<MenuProps> = ({ products, categories, onAddToCart, filters,
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex-1 flex flex-col">
+                <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
                   <div className="mb-2">
-                    <h3 className="text-lg font-bold text-coffee-900 group-hover:text-red-600 transition-colors mb-2">
+                    <h3 className="text-base sm:text-lg font-bold text-coffee-900 group-hover:text-red-600 transition-colors mb-2 line-clamp-2">
                       {product.name}
                     </h3>
-                    <p className="text-coffee-600 text-sm leading-relaxed mb-4 flex-1">
+                    <p className="text-coffee-600 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-2 sm:line-clamp-3">
                       {product.description}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center justify-between gap-2 sm:gap-3">
                     <div className="flex flex-col">
                       {product.originalPrice && product.originalPrice > product.price && (
                         <span className="text-xs text-gray-400 line-through">
                           {formatPrice(product.originalPrice, language)}
                         </span>
                       )}
-                      <span className={`text-xl font-bold ${product.originalPrice ? 'text-red-600' : 'text-red-600'}`}>
+                      <span className={`text-lg sm:text-xl font-bold ${product.originalPrice ? 'text-red-600' : 'text-red-600'}`}>
                         {formatPrice(product.price, language)}
                       </span>
                     </div>
                     <button
                       onClick={() => product.isAvailable && onAddToCart(product)}
                       disabled={!product.isAvailable}
-                      className={`flex-shrink-0 w-10 h-10 rounded-full font-semibold transition-all flex items-center justify-center group/btn ${
+                      className={`flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full font-semibold transition-all flex items-center justify-center group/btn active:scale-95 touch-manipulation ${
                         product.isAvailable 
                           ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:scale-110' 
                           : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                       }`}
+                      aria-label={`Add ${product.name} to cart`}
                     >
                       {product.isAvailable ? (
                         <Plus className="w-6 h-6 group-hover/btn:rotate-90 transition-transform" />

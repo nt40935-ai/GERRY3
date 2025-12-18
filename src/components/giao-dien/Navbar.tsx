@@ -57,34 +57,35 @@ const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <nav className={navClasses}>
-      <div className="container mx-auto px-6 flex justify-between items-center">
+      <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         
         {/* Left: Hamburger + Logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
            {/* Sidebar Toggle */}
            <button 
              onClick={onOpenSidebar}
-             className={`p-2 rounded-lg transition-colors hover:bg-white/20 ${textColor}`}
+             className={`p-2 rounded-lg transition-colors hover:bg-white/20 active:scale-95 touch-manipulation ${textColor}`}
+             aria-label="Menu"
            >
-             <MenuIcon className="w-6 h-6" />
+             <MenuIcon className="w-5 h-5 sm:w-6 sm:h-6" />
            </button>
 
            {/* Logo */}
            <div 
-             className="flex items-center gap-2 cursor-pointer group" 
+             className="flex items-center gap-1 sm:gap-2 cursor-pointer group" 
              onClick={() => onScrollTo('hero')}
            >
              {brandSettings.logoUrl ? (
-               <div className={`w-10 h-10 rounded-full overflow-hidden border-2 ${isScrolled ? 'border-amber-500' : 'border-white/50'}`}>
+               <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 ${isScrolled ? 'border-amber-500' : 'border-white/50'}`}>
                  <img src={brandSettings.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                </div>
              ) : (
-               <div className={`p-2 rounded-full hidden sm:block ${isScrolled ? 'bg-coffee-800' : 'bg-white/20 backdrop-blur-sm'}`}>
-                 <Coffee className={`w-5 h-5 ${isScrolled ? 'text-amber-500' : 'text-amber-400'}`} />
+               <div className={`p-1.5 sm:p-2 rounded-full hidden sm:block ${isScrolled ? 'bg-coffee-800' : 'bg-white/20 backdrop-blur-sm'}`}>
+                 <Coffee className={`w-4 h-4 sm:w-5 sm:h-5 ${isScrolled ? 'text-amber-500' : 'text-amber-400'}`} />
                </div>
              )}
              
-             <span className={`text-xl md:text-2xl font-serif font-bold tracking-wider ${textColor}`}>
+             <span className={`text-base sm:text-xl md:text-2xl font-serif font-bold tracking-wider ${textColor}`}>
                {brandSettings.brandName.toUpperCase()}<span className="text-amber-500">.</span>
              </span>
            </div>
@@ -111,15 +112,16 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Right: Icons (Lang + Auth + Cart) */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           
           {/* Language Toggle */}
           <button 
              onClick={() => setLanguage(language === 'en' ? 'vi' : 'en')}
-             className={`p-2 rounded-lg flex items-center gap-1 font-bold text-xs uppercase ${textColor} hover:bg-white/20 transition-all`}
+             className={`p-1.5 sm:p-2 rounded-lg flex items-center gap-1 font-bold text-xs uppercase ${textColor} hover:bg-white/20 transition-all active:scale-95 touch-manipulation`}
+             aria-label="Change language"
           >
-            <Globe className="w-4 h-4" />
-            <span>{language}</span>
+            <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{language}</span>
           </button>
 
           {/* Auth Button */}
@@ -127,14 +129,15 @@ const Navbar: React.FC<NavbarProps> = ({
             <div className="relative">
               <button 
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 focus:outline-none"
+                className="flex items-center gap-1 sm:gap-2 focus:outline-none active:scale-95 touch-manipulation"
+                aria-label="User menu"
               >
                 <img 
                   src={user.avatar} 
                   alt={user.name} 
-                  className="w-8 h-8 rounded-full border-2 border-amber-500 object-cover"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-amber-500 object-cover"
                 />
-                <span className={`hidden md:block text-sm font-bold ${textColor}`}>{user.name}</span>
+                <span className={`hidden lg:block text-sm font-bold ${textColor}`}>{user.name}</span>
               </button>
 
               {/* Profile Dropdown */}
@@ -182,28 +185,30 @@ const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button 
               onClick={onOpenAuth}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+              className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all active:scale-95 touch-manipulation ${
                  isScrolled 
                    ? 'bg-amber-600 text-white hover:bg-amber-700' 
                    : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
               }`}
+              aria-label="Sign in"
             >
-              <UserIcon className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm font-bold">{t.nav.sign_in}</span>
+              <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm font-bold">{t.nav.sign_in}</span>
             </button>
           )}
 
           {/* Cart Button */}
           <button 
             onClick={onOpenCart}
-            className={`relative p-2 rounded-full transition-colors ${
+            className={`relative p-2 rounded-full transition-colors active:scale-95 touch-manipulation ${
               isScrolled ? 'hover:bg-coffee-800 text-white' : 'hover:bg-white/20 text-coffee-900 md:text-white'
             }`}
+            aria-label="Shopping cart"
           >
-            <ShoppingBag className="w-6 h-6" />
+            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
             {totalItems > 0 && (
-              <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-amber-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-transparent">
-                {totalItems}
+              <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-amber-600 text-white text-[9px] sm:text-[10px] font-bold w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center rounded-full border-2 border-transparent">
+                {totalItems > 9 ? '9+' : totalItems}
               </span>
             )}
           </button>

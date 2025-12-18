@@ -56,33 +56,34 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
   const currentTotal = calculateItemPrice(product, isDrink ? size : undefined, selectedToppings);
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-2 sm:p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       
-      <div className="relative bg-white w-full max-w-2xl h-[90vh] rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white w-full max-w-2xl h-[95vh] sm:h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
         <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors backdrop-blur-md z-10"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors backdrop-blur-md z-10 active:scale-95 touch-manipulation"
+            aria-label="Close"
         >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar">
             {/* Header Image */}
-            <div className="h-64 relative">
+            <div className="h-48 sm:h-56 md:h-64 relative">
             <img src={product.image} alt={product.name} className={`w-full h-full object-cover ${!product.isAvailable ? 'grayscale' : ''}`} />
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-6">
-                <h3 className="text-3xl font-serif font-bold text-white mb-1 shadow-sm">{product.name}</h3>
+            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white mb-1 shadow-sm">{product.name}</h3>
                 <div className="flex items-center gap-2 text-white/90">
-                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                   <span className="font-bold">{product.rating.toFixed(1)}</span>
-                   <span className="text-sm opacity-80">({product.reviewCount || 0} reviews)</span>
+                   <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400" />
+                   <span className="font-bold text-sm sm:text-base">{product.rating.toFixed(1)}</span>
+                   <span className="text-xs sm:text-sm opacity-80">({product.reviewCount || 0} reviews)</span>
                 </div>
             </div>
             </div>
 
-            <div className="p-6 md:p-8">
-            <p className="text-coffee-600 text-base leading-relaxed mb-8">{product.description}</p>
+            <div className="p-4 sm:p-6 md:p-8">
+            <p className="text-coffee-600 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">{product.description}</p>
 
             <div className="space-y-6">
                 
@@ -93,8 +94,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
                     <Coffee className="w-4 h-4 text-amber-600" />
                     {t.modal.size}
                     </label>
-                    <div className="flex gap-4">
-                    <label className={`flex-1 cursor-pointer border rounded-xl p-3 flex flex-col items-center gap-1 transition-all ${
+                    <div className="flex gap-3 sm:gap-4">
+                    <label className={`flex-1 cursor-pointer border rounded-lg sm:rounded-xl p-2.5 sm:p-3 flex flex-col items-center gap-1 transition-all active:scale-95 touch-manipulation ${
                         size === 'M' 
                         ? 'border-amber-500 bg-amber-50 text-amber-900' 
                         : 'border-gray-200 hover:border-gray-300 text-gray-600'
@@ -107,11 +108,11 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
                         onChange={() => setSize('M')}
                         className="hidden" 
                         />
-                        <span className="font-bold text-lg">M</span>
+                        <span className="font-bold text-base sm:text-lg">M</span>
                         <span className="text-xs">Regular</span>
                     </label>
 
-                    <label className={`flex-1 cursor-pointer border rounded-xl p-3 flex flex-col items-center gap-1 transition-all ${
+                    <label className={`flex-1 cursor-pointer border rounded-lg sm:rounded-xl p-2.5 sm:p-3 flex flex-col items-center gap-1 transition-all active:scale-95 touch-manipulation ${
                         size === 'L' 
                         ? 'border-amber-500 bg-amber-50 text-amber-900' 
                         : 'border-gray-200 hover:border-gray-300 text-gray-600'
@@ -124,7 +125,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
                         onChange={() => setSize('L')}
                         className="hidden" 
                         />
-                        <span className="font-bold text-lg">L</span>
+                        <span className="font-bold text-base sm:text-lg">L</span>
                         <span className="text-xs">Large (+{formatPrice(SIZE_L_UPCHARGE, language)})</span>
                     </label>
                     </div>
@@ -138,14 +139,14 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose, o
                       <Layers className="w-4 h-4 text-amber-600" />
                       {t.modal.toppings}
                     </label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                       {toppings.map((topping) => {
                         const isSelected = selectedToppings.some(t => t.id === topping.id);
                         return (
                           <div 
                             key={topping.id}
                             onClick={() => toggleTopping(topping)}
-                            className={`cursor-pointer border rounded-lg p-3 flex items-center justify-between transition-all ${
+                            className={`cursor-pointer border rounded-lg p-2.5 sm:p-3 flex items-center justify-between transition-all active:scale-95 touch-manipulation ${
                               isSelected 
                                 ? 'border-amber-500 bg-amber-50' 
                                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'

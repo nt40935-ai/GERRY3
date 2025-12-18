@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, MapPin, Phone, CreditCard, Banknote, CheckCircle, Loader2, QrCode, User as UserIcon, MessageSquare, Ticket } from 'lucide-react';
+import { X, MapPin, Phone, CreditCard, Banknote, CheckCircle, Loader2, QrCode, User as UserIcon, MessageSquare, Ticket, Smartphone, Wallet } from 'lucide-react';
 import { CartItem, User, Language, DiscountCode, BrandSettings } from '../../types';
 import { TRANSLATIONS, formatPrice, calculateItemPrice, calculateLoyaltyDiscount, getLoyaltyTier } from '../../constants';
 
@@ -212,21 +212,21 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cartItem
   }
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[90] flex items-center justify-center p-2 sm:p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       
-      <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative bg-white w-full max-w-2xl rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
         
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-coffee-50">
-          <h2 className="text-2xl font-serif font-bold text-coffee-900">{t.checkout.title}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-coffee-200 rounded-full transition-colors">
-            <X className="w-5 h-5 text-coffee-700" />
+        <div className="p-4 sm:p-6 border-b border-gray-100 flex justify-between items-center bg-coffee-50">
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-coffee-900">{t.checkout.title}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-coffee-200 rounded-full transition-colors active:scale-95 touch-manipulation" aria-label="Close">
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-coffee-700" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 md:p-8">
-             <div className="grid md:grid-cols-2 gap-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
+             <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
              {/* Form */}
              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-6">
                <h3 className="font-bold text-lg text-coffee-900 border-b border-gray-100 pb-2">{t.checkout.shipping}</h3>
@@ -346,30 +346,154 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cartItem
                </div>
 
                <h3 className="font-bold text-lg text-coffee-900 border-b border-gray-100 pb-2 pt-4">{t.checkout.payment}</h3>
-               <div className="grid grid-cols-2 gap-4">
-                  <label className={`cursor-pointer border p-4 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'card' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {/* Bank Transfer */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'card' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
                     <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'card'} onChange={() => setFormData({...formData, paymentMethod: 'card'})} />
-                    <CreditCard className="w-6 h-6" />
-                    <span className="text-sm font-semibold text-center">{t.checkout.online}</span>
+                    <CreditCard className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.online}</span>
                   </label>
 
-                  <label className={`cursor-pointer border p-4 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'cod' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                  {/* Cash on Delivery */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'cod' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
                     <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'cod'} onChange={() => setFormData({...formData, paymentMethod: 'cod'})} />
-                    <Banknote className="w-6 h-6" />
-                    <span className="text-sm font-semibold text-center">{t.checkout.cod}</span>
+                    <Banknote className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.cod}</span>
+                  </label>
+
+                  {/* MoMo */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'momo' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'momo'} onChange={() => setFormData({...formData, paymentMethod: 'momo'})} />
+                    <Smartphone className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.momo}</span>
+                  </label>
+
+                  {/* ZaloPay */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'zalopay' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'zalopay'} onChange={() => setFormData({...formData, paymentMethod: 'zalopay'})} />
+                    <Wallet className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.zalopay}</span>
+                  </label>
+
+                  {/* VNPay */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'vnpay' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'vnpay'} onChange={() => setFormData({...formData, paymentMethod: 'vnpay'})} />
+                    <CreditCard className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.vnpay}</span>
+                  </label>
+
+                  {/* PayPal */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'paypal' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'paypal'} onChange={() => setFormData({...formData, paymentMethod: 'paypal'})} />
+                    <CreditCard className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.paypal}</span>
+                  </label>
+
+                  {/* Stripe (Credit/Debit Card) */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'stripe' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'stripe'} onChange={() => setFormData({...formData, paymentMethod: 'stripe'})} />
+                    <CreditCard className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.stripe}</span>
+                  </label>
+
+                  {/* QR Code */}
+                  <label className={`cursor-pointer border p-3 rounded-xl flex flex-col items-center gap-2 transition-all ${formData.paymentMethod === 'qr' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <input type="radio" name="payment" className="hidden" checked={formData.paymentMethod === 'qr'} onChange={() => setFormData({...formData, paymentMethod: 'qr'})} />
+                    <QrCode className="w-5 h-5" />
+                    <span className="text-xs font-semibold text-center">{t.checkout.qr}</span>
                   </label>
                </div>
 
-               {/* Bank Transfer Info */}
+               {/* Payment Method Info */}
                {formData.paymentMethod === 'card' && (
-                 <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2">
+                 <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2 mt-4">
                    <div className="flex items-start gap-3">
                      <div className="bg-white p-2 rounded-lg border border-blue-100">
-                        <QrCode className="w-8 h-8 text-coffee-900" />
+                        <CreditCard className="w-6 h-6 text-coffee-900" />
                      </div>
                      <div className="text-sm text-coffee-800">
-                       <p className="font-bold mb-1">Bank Transfer Info</p>
+                       <p className="font-bold mb-1">{language === 'vi' ? 'Thông Tin Chuyển Khoản' : 'Bank Transfer Info'}</p>
                        <p className="opacity-90 leading-relaxed">{t.checkout.bank_info}</p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+
+               {(formData.paymentMethod === 'momo' || formData.paymentMethod === 'zalopay' || formData.paymentMethod === 'vnpay') && (
+                 <div className="bg-green-50 border border-green-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2 mt-4">
+                   <div className="flex items-start gap-3">
+                     <div className="bg-white p-2 rounded-lg border border-green-100">
+                        <QrCode className="w-6 h-6 text-coffee-900" />
+                     </div>
+                     <div className="text-sm text-coffee-800">
+                       <p className="font-bold mb-1">
+                         {language === 'vi' 
+                           ? formData.paymentMethod === 'momo' ? 'Quét mã MoMo' 
+                             : formData.paymentMethod === 'zalopay' ? 'Quét mã ZaloPay'
+                             : 'Quét mã VNPay'
+                           : formData.paymentMethod === 'momo' ? 'Scan MoMo QR'
+                             : formData.paymentMethod === 'zalopay' ? 'Scan ZaloPay QR'
+                             : 'Scan VNPay QR'}
+                       </p>
+                       <p className="opacity-90 leading-relaxed">
+                         {language === 'vi' 
+                           ? 'Mở ứng dụng và quét mã QR để thanh toán'
+                           : 'Open the app and scan the QR code to pay'}
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+
+               {formData.paymentMethod === 'paypal' && (
+                 <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2 mt-4">
+                   <div className="flex items-start gap-3">
+                     <div className="bg-white p-2 rounded-lg border border-blue-100">
+                        <CreditCard className="w-6 h-6 text-coffee-900" />
+                     </div>
+                     <div className="text-sm text-coffee-800">
+                       <p className="font-bold mb-1">{language === 'vi' ? 'Thanh toán bằng PayPal' : 'Pay with PayPal'}</p>
+                       <p className="opacity-90 leading-relaxed">
+                         {language === 'vi' 
+                           ? 'Bạn sẽ được chuyển hướng đến trang thanh toán PayPal'
+                           : 'You will be redirected to PayPal payment page'}
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+
+               {formData.paymentMethod === 'stripe' && (
+                 <div className="bg-purple-50 border border-purple-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2 mt-4">
+                   <div className="flex items-start gap-3">
+                     <div className="bg-white p-2 rounded-lg border border-purple-100">
+                        <CreditCard className="w-6 h-6 text-coffee-900" />
+                     </div>
+                     <div className="text-sm text-coffee-800">
+                       <p className="font-bold mb-1">{language === 'vi' ? 'Thanh toán bằng thẻ' : 'Pay with Card'}</p>
+                       <p className="opacity-90 leading-relaxed">
+                         {language === 'vi' 
+                           ? 'Nhập thông tin thẻ tín dụng/ghi nợ của bạn'
+                           : 'Enter your credit/debit card information'}
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+
+               {formData.paymentMethod === 'qr' && (
+                 <div className="bg-gray-50 border border-gray-100 p-4 rounded-xl animate-in fade-in slide-in-from-top-2 mt-4">
+                   <div className="flex items-start gap-3">
+                     <div className="bg-white p-2 rounded-lg border border-gray-100">
+                        <QrCode className="w-6 h-6 text-coffee-900" />
+                     </div>
+                     <div className="text-sm text-coffee-800">
+                       <p className="font-bold mb-1">{language === 'vi' ? 'Quét mã QR để thanh toán' : 'Scan QR Code to Pay'}</p>
+                       <p className="opacity-90 leading-relaxed">
+                         {language === 'vi' 
+                           ? 'Mở ứng dụng ngân hàng và quét mã QR'
+                           : 'Open your banking app and scan the QR code'}
+                       </p>
                      </div>
                    </div>
                  </div>

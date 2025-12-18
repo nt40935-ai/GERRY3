@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>GERRY COFFEE</title>
     <!-- Tailwind CSS via CDN for quick setup locally -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,6 +50,29 @@
       ::-webkit-scrollbar-track { background: #f1f1f1; }
       ::-webkit-scrollbar-thumb { background: #a77f73; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #8a5a4d; }
+      
+      /* Touch-friendly improvements */
+      * {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+      }
+      
+      button, a {
+        touch-action: manipulation;
+      }
+      
+      /* Better text rendering on mobile */
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      
+      /* Prevent text size adjust on iOS */
+      @media screen and (max-width: 768px) {
+        input, textarea, select {
+          font-size: 16px !important;
+        }
+      }
     </style>
 </head>
   <body>
